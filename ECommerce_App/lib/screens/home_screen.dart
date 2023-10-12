@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/consts/app_colors.dart';
 import 'package:ecommerce_app/provider/theme_provider.dart';
+import 'package:ecommerce_app/widgets/subtitle_text.dart';
+import 'package:ecommerce_app/widgets/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("hello",style: TextStyle(fontSize: 50),),
+            TitlesTextWidget(label: "label"),
+            SubtitleTextWidget(label: "label"),
             ElevatedButton(onPressed: (){}, child: Text("Text")),
             SwitchListTile(
               title: Text(themeProvider.getIsDarkTheme?"Dark Mode": "Light Mode"),
                 value: themeProvider.getIsDarkTheme,
                 onChanged: (value){
-                  themeProvider.setDarkTheme(value);
+                  themeProvider.setDarkTheme(themeValue: value);
                 })
           ],
         ),

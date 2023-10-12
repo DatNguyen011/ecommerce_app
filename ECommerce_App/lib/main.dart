@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ecommerce_app/consts/theme_data.dart';
 import 'package:ecommerce_app/provider/theme_provider.dart';
+import 'package:ecommerce_app/root_screen.dart';
 import 'package:ecommerce_app/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: Styles.themeData(isDarkTheme: themeProvider.getIsDarkTheme,context: context),
-              home: const HomeScreen());
+              home: const RootScreen());
         }
       ),
     );
