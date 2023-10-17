@@ -10,6 +10,7 @@ import 'screens/cart/cart_screen.dart';
 
 
 class RootScreen extends StatefulWidget {
+  static const routeName = '/RootScreen';
   const RootScreen({super.key});
 
   @override
@@ -63,8 +64,11 @@ class _RootScreenState extends State<RootScreen> {
             label: "Search",
           ),
           NavigationDestination(
-            selectedIcon: Icon(IconlyBold.bag2),
-            icon: Icon(IconlyLight.bag2),
+            selectedIcon: Icon(IconlyBold.buy),
+            icon: Badge(
+                label: Text("5"),
+                textColor: Colors.white,
+                child: Icon(IconlyLight.buy)),
             label: "Cart",
           ),
           NavigationDestination(
