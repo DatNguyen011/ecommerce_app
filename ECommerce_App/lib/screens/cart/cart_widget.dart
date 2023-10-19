@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/cart.dart';
+import '../../provider/cart_provider.dart';
+import '../../provider/products_provider.dart';
+import '../../widgets/product/heart_btn.dart';
 import '../../widgets/subtitle_text.dart';
 import '../../widgets/title_text.dart';
 
@@ -14,7 +19,13 @@ class CartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return FittedBox(
+    final cartModel = Provider.of<CartModel>(context);
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    final getCurrProduct = productsProvider.findByProdId(cartModel.productId);
+    final cartProvider = Provider.of<CartProvider>(context);
+    return getCurrProduct == null
+        ? const SizedBox.shrink()
+        : FittedBox(
       child: IntrinsicWidth(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -24,8 +35,7 @@ class CartWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
                 child: FancyShimmerImage(
-                  imageUrl:
-                  'https://i.ibb.co/8r1Ny2n/20-Nike-Air-Force-1-07.png',
+                  imageUrl: getCurrProduct.productImage,
                   height: size.height * 0.2,
                   width: size.height * 0.2,
                 ),
@@ -41,24 +51,25 @@ class CartWidget extends StatelessWidget {
                         SizedBox(
                           width: size.width * 0.6,
                           child: TitlesTextWidget(
-                            label: "Title" * 15,
+                            label: getCurrProduct.productTitle,
                             maxLines: 2,
                           ),
                         ),
                         Column(
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                cartProvider.removeOneItem(
+                                  productId: getCurrProduct.productId,
+                                );
+                              },
                               icon: const Icon(
                                 Icons.clear,
                                 color: Colors.red,
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                IconlyLight.heart,
-                              ),
+                            HeartButtonWidget(
+                              productId: getCurrProduct.productId,
                             ),
                           ],
                         ),
@@ -67,16 +78,16 @@ class CartWidget extends StatelessWidget {
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SubtitleTextWidget(
-                          label: "16.00\$",
+                        SubtitleTextWidget(
+                          label: "${getCurrProduct.productPrice}\$",
                           color: Colors.blue,
                         ),
                         const Spacer(),
                         OutlinedButton.icon(
                           onPressed: () async {
                             await showModalBottomSheet(
-                              backgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor: Theme.of(context)
+                                  .scaffoldBackgroundColor,
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(30),
@@ -85,12 +96,14 @@ class CartWidget extends StatelessWidget {
                               ),
                               context: context,
                               builder: (context) {
-                                return const QuantityBottomSheetWidget();
+                                return QuantityBottomSheetWidget(
+                                  cartModel: cartModel,
+                                );
                               },
                             );
                           },
                           icon: const Icon(IconlyLight.arrowDown2),
-                          label: const Text("Qty: 6"),
+                          label: Text("Qty: ${cartModel.quantity}"),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(width: 1),
                             shape: RoundedRectangleBorder(

@@ -1,10 +1,15 @@
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+
+import '../../provider/wishlist_provider.dart';
 import '../../services/assets_manager.dart';
+import '../../services/my_app_functions.dart';
 import '../../widgets/empty_bag.dart';
 import '../../widgets/product/product_widget.dart';
 import '../../widgets/title_text.dart';
+
 
 class WishlistScreen extends StatelessWidget {
   static const routName = "/WishlistScreen";
@@ -12,7 +17,9 @@ class WishlistScreen extends StatelessWidget {
   final bool isEmpty = true;
   @override
   Widget build(BuildContext context) {
-    return isEmpty
+    final wishlistProvider = Provider.of<WishlistProvider>(context);
+
+    return wishlistProvider.getWishlists.isEmpty
         ? Scaffold(
       body: EmptyBagWidget(
         imagePath: AssetsManager.bagWish,
@@ -30,10 +37,20 @@ class WishlistScreen extends StatelessWidget {
             AssetsManager.shoppingCart,
           ),
         ),
-        title: const TitlesTextWidget(label: "Wishlist (6)"),
+        title: TitlesTextWidget(
+            label: "Wishlist (${wishlistProvider.getWishlists.length})"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              MyAppFunctions.showErrorOrWarningDialog(
+                isError: false,
+                context: context,
+                subtitle: "Clear cart?",
+                fct: () {
+                  wishlistProvider.clearLocalWishlist();
+                },
+              );
+            },
             icon: const Icon(
               Icons.delete_forever_rounded,
               color: Colors.red,
@@ -45,9 +62,16 @@ class WishlistScreen extends StatelessWidget {
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
         builder: (context, index) {
-          return const ProductWidget();
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ProductWidget(
+              productId: wishlistProvider.getWishlists.values
+                  .toList()[index]
+                  .productId,
+            ),
+          );
         },
-        itemCount: 200,
+        itemCount: wishlistProvider.getWishlists.length,
         crossAxisCount: 2,
       ),
     );

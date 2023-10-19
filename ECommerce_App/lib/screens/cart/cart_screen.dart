@@ -2,30 +2,32 @@ import 'package:ecommerce_app/services/assets_manager.dart';
 import 'package:ecommerce_app/widgets/empty_bag.dart';
 import 'package:ecommerce_app/widgets/title_text.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../../provider/cart_provider.dart';
+import '../../services/my_app_functions.dart';
 import 'bottom_checkout.dart';
 import 'cart_widget.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
   final bool isEmpty = false;
   @override
   Widget build(BuildContext context) {
-    return isEmpty ? Scaffold(
+    // final productsProvider = Provider.of<ProductsProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
+
+    return cartProvider.getCartitems.isEmpty
+        ? Scaffold(
       body: EmptyBagWidget(
         imagePath: AssetsManager.shoppingBasket,
-        title: 'Your cart is empty',
-        subtitle: 'Looks like your cart is empty add something and make me happy',
-        buttonText: 'Shop now',
+        title: "Your cart is empty",
+        subtitle:
+        "Looks like your cart is empty add something and make me happy",
+        buttonText: "Shop now",
       ),
-    ):Scaffold(
-      bottomSheet: CartBottomSheetWidget(),
+    )
+        : Scaffold(
+      bottomSheet: const CartBottomSheetWidget(),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -33,10 +35,20 @@ class _CartScreenState extends State<CartScreen> {
             AssetsManager.shoppingCart,
           ),
         ),
-        title: const TitlesTextWidget(label: "Cart (6)"),
+        title: TitlesTextWidget(
+            label: "Cart (${cartProvider.getCartitems.length})"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              MyAppFunctions.showErrorOrWarningDialog(
+                isError: false,
+                context: context,
+                subtitle: "Clear cart?",
+                fct: () {
+                  cartProvider.clearLocalCart();
+                },
+              );
+            },
             icon: const Icon(
               Icons.delete_forever_rounded,
               color: Colors.red,
@@ -44,11 +56,23 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return const CartWidget();
-          }),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                itemCount: cartProvider.getCartitems.length,
+                itemBuilder: (context, index) {
+                  return ChangeNotifierProvider.value(
+                      value: cartProvider.getCartitems.values
+                          .toList()[index],
+                      child: const CartWidget());
+                }),
+          ),
+          const SizedBox(
+            height: kBottomNavigationBarHeight + 10,
+          )
+        ],
+      ),
     );
   }
 }

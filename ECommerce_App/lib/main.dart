@@ -1,7 +1,11 @@
 import 'dart:developer';
 
 import 'package:ecommerce_app/consts/theme_data.dart';
+import 'package:ecommerce_app/provider/cart_provider.dart';
+import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/provider/theme_provider.dart';
+import 'package:ecommerce_app/provider/viewed_recently_provider.dart';
+import 'package:ecommerce_app/provider/wishlist_provider.dart';
 import 'package:ecommerce_app/root_screen.dart';
 import 'package:ecommerce_app/screens/auth/forgot_pass.dart';
 import 'package:ecommerce_app/screens/auth/login.dart';
@@ -11,6 +15,7 @@ import 'package:ecommerce_app/screens/inner_screen/order/orders_screen.dart';
 import 'package:ecommerce_app/screens/inner_screen/product_details.dart';
 import 'package:ecommerce_app/screens/inner_screen/viewed_recently.dart';
 import 'package:ecommerce_app/screens/inner_screen/wish_list.dart';
+import 'package:ecommerce_app/screens/search_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,51 +26,55 @@ import 'package:provider/provider.dart';
 
 late Size mq;
 
-Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(); //enter full-screen
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  //
-  // //for setting orientation to portrait only
-  // SystemChrome.setPreferredOrientations(
-  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-  //     .then((value) {
-  //   // _initializeFirebase();
-  //
-  // });
+void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) {
           return ThemeProvider();
-        })
+        }),
+        ChangeNotifierProvider(create: (_) {
+          return ProductsProvider();
+        }),
+        ChangeNotifierProvider(create: (_) {
+          return CartProvider();
+        }),
+        ChangeNotifierProvider(create: (_) {
+          return WishlistProvider();
+        }),
+        ChangeNotifierProvider(create: (_) {
+          return ViewedProdProvider();
+        }),
       ],
       child: Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          title: 'ShopSmart EN',
           theme: Styles.themeData(
               isDarkTheme: themeProvider.getIsDarkTheme, context: context),
-          // home: const RootScreen(),
-          home: const LoginScreen(),
+          home: const RootScreen(),
+          // home: const LoginScreen(),
           routes: {
             RootScreen.routeName: (context) => const RootScreen(),
             ProductDetailsScreen.routName: (context) =>
-                const ProductDetailsScreen(),
+            const ProductDetailsScreen(),
             WishlistScreen.routName: (context) => const WishlistScreen(),
             ViewedRecentlyScreen.routName: (context) =>
-                const ViewedRecentlyScreen(),
+            const ViewedRecentlyScreen(),
             RegisterScreen.routName: (context) => const RegisterScreen(),
             LoginScreen.routeName: (context) => const LoginScreen(),
             OrdersScreenFree.routeName: (context) => const OrdersScreenFree(),
             ForgotPasswordScreen.routeName: (context) =>
-                const ForgotPasswordScreen(),
+            const ForgotPasswordScreen(),
+            SearchScreen.routeName: (context) => const SearchScreen(),
           },
         );
       }),

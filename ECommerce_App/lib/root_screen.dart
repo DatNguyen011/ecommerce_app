@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/screens/home_screen.dart';
 import 'package:ecommerce_app/screens/profile_screen.dart';
 import 'package:ecommerce_app/screens/search_screen.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/cart/cart_screen.dart';
 
@@ -35,6 +37,7 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -52,26 +55,28 @@ class _RootScreenState extends State<RootScreen> {
           });
           controller.jumpToPage(currentScreen);
         },
-        destinations: const [
-          NavigationDestination(
+        destinations: [
+          const NavigationDestination(
             selectedIcon: Icon(IconlyBold.home),
             icon: Icon(IconlyLight.home),
             label: "Home",
           ),
-          NavigationDestination(
+          const NavigationDestination(
             selectedIcon: Icon(IconlyBold.search),
             icon: Icon(IconlyLight.search),
             label: "Search",
           ),
           NavigationDestination(
-            selectedIcon: Icon(IconlyBold.buy),
+            selectedIcon: const Icon(IconlyBold.bag2),
             icon: Badge(
-                label: Text("5"),
-                textColor: Colors.white,
-                child: Icon(IconlyLight.buy)),
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              label: Text(cartProvider.getCartitems.length.toString()),
+              child: const Icon(IconlyLight.bag2),
+            ),
             label: "Cart",
           ),
-          NavigationDestination(
+          const NavigationDestination(
             selectedIcon: Icon(IconlyBold.profile),
             icon: Icon(IconlyLight.profile),
             label: "Profile",
@@ -81,3 +86,4 @@ class _RootScreenState extends State<RootScreen> {
     );
   }
 }
+

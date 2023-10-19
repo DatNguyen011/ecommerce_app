@@ -1,7 +1,15 @@
+import 'package:ecommerce_app/screens/cart/quantity_bottom.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/cart.dart';
+import '../../provider/cart_provider.dart';
+import '../../provider/products_provider.dart';
+import '../../widgets/product/heart_btn.dart';
 import '../../widgets/subtitle_text.dart';
 import '../../widgets/title_text.dart';
 
