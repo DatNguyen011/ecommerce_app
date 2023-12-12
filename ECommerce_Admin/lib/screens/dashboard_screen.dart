@@ -42,7 +42,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           crossAxisCount: 2,
           children: List.generate(
             DashboardButtonsModel.dashboardBtnList(context).length,
-            (index) => DashboardButtonsWidget(
+                (index) => DashboardButtonsWidget(
               text: DashboardButtonsModel.dashboardBtnList(context)[index].text,
               imagePath: DashboardButtonsModel.dashboardBtnList(context)[index]
                   .imagePath,

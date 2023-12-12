@@ -44,7 +44,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Ecommerce",
+          "fontSize: 22",
         ),
       ),
       body: GestureDetector(
@@ -142,3 +142,4 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 }
+

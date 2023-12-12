@@ -6,6 +6,7 @@ import '../../provider/cart_provider.dart';
 import '../../provider/products_provider.dart';
 import '../../provider/viewed_recently_provider.dart';
 import '../../screens/inner_screen/product_details.dart';
+import '../../services/my_app_functions.dart';
 import '../subtitle_text.dart';
 import '../title_text.dart';
 import 'heart_btn.dart';
@@ -100,13 +101,29 @@ class _ProductWidgetState extends State<ProductWidget> {
                       color: Colors.lightBlue,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12.0),
-                        onTap: () {
+                        onTap: () async {
                           if (cartProvider.isProdinCart(
                               productId: getCurrProduct.productId)) {
                             return;
                           }
-                          cartProvider.addProductToCart(
-                              productId: getCurrProduct.productId);
+                          try {
+                            await cartProvider.addToCartFirebase(
+                                productId: getCurrProduct.productId,
+                                qty: 1,
+                                context: context);
+                          } catch (e) {
+                            await MyAppFunctions.showErrorOrWarningDialog(
+                              context: context,
+                              subtitle: e.toString(),
+                              fct: () {},
+                            );
+                          }
+                          // if (cartProvider.isProdinCart(
+                          //     productId: getCurrProduct.productId)) {
+                          //   return;
+                          // }
+                          // cartProvider.addProductToCart(
+                          //     productId: getCurrProduct.productId);
                         },
                         splashColor: Colors.red,
                         child: Padding(

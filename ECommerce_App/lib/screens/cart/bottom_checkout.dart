@@ -15,10 +15,12 @@ import '../../widgets/title_text.dart';
 
 
 class CartBottomSheetWidget extends StatelessWidget {
-  const CartBottomSheetWidget({super.key});
-
+  const CartBottomSheetWidget({super.key, required this.function});
+  final Function function;
   @override
   Widget build(BuildContext context) {
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -36,19 +38,23 @@ class CartBottomSheetWidget extends StatelessWidget {
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     FittedBox(
                         child: TitlesTextWidget(
-                            label: "Total (6 products/9 items)")),
+                            label:
+                            "Total (${cartProvider.getCartitems.length} products/${cartProvider.getQty()} items)")),
                     SubtitleTextWidget(
-                      label: "16.0\$",
+                      label:
+                      "${cartProvider.getTotal(productsProvider: productsProvider).toStringAsFixed(2)}\$",
                       color: Colors.blue,
                     ),
                   ],
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await function();
+                },
                 child: const Text("Checkout"),
               ),
             ],

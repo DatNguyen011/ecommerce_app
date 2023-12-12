@@ -81,7 +81,7 @@ dependencies:
 
   # For storing images into gallery
   gallery_saver: ^2.3.2
-
+  fluttertoast: ^8.2.2
   google_fonts: ^4.0.4
 dev_dependencies:
   flutter_test:

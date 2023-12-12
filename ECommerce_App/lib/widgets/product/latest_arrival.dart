@@ -6,6 +6,7 @@ import '../../models/product.dart';
 import '../../provider/cart_provider.dart';
 import '../../provider/viewed_recently_provider.dart';
 import '../../screens/inner_screen/product_details.dart';
+import '../../services/my_app_functions.dart';
 import '../subtitle_text.dart';
 import 'heart_btn.dart';
 
@@ -66,13 +67,23 @@ class LatestArrivalProductsWidget extends StatelessWidget {
                             productId: productsModel.productId,
                           ),
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (cartProvider.isProdinCart(
                                   productId: productsModel.productId)) {
                                 return;
                               }
-                              cartProvider.addProductToCart(
-                                  productId: productsModel.productId);
+                              try {
+                                await cartProvider.addToCartFirebase(
+                                    productId: productsModel.productId,
+                                    qty: 1,
+                                    context: context);
+                              } catch (e) {
+                                await MyAppFunctions.showErrorOrWarningDialog(
+                                  context: context,
+                                  subtitle: e.toString(),
+                                  fct: () {},
+                                );
+                              }
                             },
                             icon: Icon(
                               cartProvider.isProdinCart(

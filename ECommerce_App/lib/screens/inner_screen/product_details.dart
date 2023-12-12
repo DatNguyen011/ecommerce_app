@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../consts/app_constants.dart';
 import '../../provider/cart_provider.dart';
 import '../../provider/products_provider.dart';
+import '../../services/my_app_functions.dart';
 import '../../widgets/product/heart_btn.dart';
 import '../../widgets/subtitle_text.dart';
 import '../../widgets/title_text.dart';
@@ -41,7 +42,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
         // automaticallyImplyLeading: false,
-        title: Text("detail"),
+        title: Text("fontSize: 20"),
       ),
       body: getCurrProduct == null
           ? const SizedBox.shrink()
@@ -109,14 +110,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (cartProvider.isProdinCart(
                                     productId:
                                     getCurrProduct.productId)) {
                                   return;
                                 }
-                                cartProvider.addProductToCart(
-                                    productId: getCurrProduct.productId);
+                                try {
+                                  await cartProvider.addToCartFirebase(
+                                      productId: getCurrProduct.productId,
+                                      qty: 1,
+                                      context: context);
+                                } catch (e) {
+                                  await MyAppFunctions
+                                      .showErrorOrWarningDialog(
+                                    context: context,
+                                    subtitle: e.toString(),
+                                    fct: () {},
+                                  );
+                                }
                               },
                               icon: Icon(
                                 cartProvider.isProdinCart(

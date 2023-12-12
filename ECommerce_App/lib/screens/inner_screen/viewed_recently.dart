@@ -40,7 +40,16 @@ class ViewedRecentlyScreen extends StatelessWidget {
             "Viewed recently (${viewedProdProvider.getViewedProds.length})"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              //  MyAppFunctions.showErrorOrWarningDialog(
+              //   isError: false,
+              //   context: context,
+              //   subtitle: "Clear cart?",
+              //   fct: () {
+              //   viewedProdProvider.clearLocalWishlist();
+              //   },
+              // );
+            },
             icon: const Icon(
               Icons.delete_forever_rounded,
               color: Colors.red,
