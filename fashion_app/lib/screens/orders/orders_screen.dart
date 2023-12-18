@@ -87,7 +87,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(''),
                           ...orders.map((order) => ChangeNotifierProvider.value(
                             value: order,
                             child: const OrderWidget(),

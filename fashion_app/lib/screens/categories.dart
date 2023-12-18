@@ -7,6 +7,7 @@ import '../widgets/category_widget.dart';
 import '../widgets/text_widget.dart';
 
 class CategoriesScreen extends StatelessWidget {
+  static const routeName = "/CategoriesScreen";
   CategoriesScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,6 +18,7 @@ class CategoriesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
+        automaticallyImplyLeading: false,
         backgroundColor: AppColor.primaryColor,
         title: const Text(
           'Danh mục',style: TextStyle(

@@ -46,9 +46,23 @@ class _OrderWidgetState extends State<OrderWidget> {
       try {
         await FirebaseFirestore.instance
             .collection('orders')
-            .where('billId', isEqualTo: ordersModel.billId,)
-            .get().then((QuerySnapshot querySnapshot) {
-          querySnapshot.docs.forEach((doc) async{
+            .where('billId', isEqualTo: ordersModel.billId)
+            .get()
+            .then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) async {
+            // String productId = doc['productId'];
+            // int quantity = doc['quantity'];
+            // print(quantity);
+            // print(productId);
+            // String currentNumberString = doc['number'];
+            // int currentNumber = int.parse(currentNumberString);
+            // int newNumber = currentNumber + quantity;
+            // String newNumberString = newNumber.toString();
+            // await FirebaseFirestore.instance.collection('products').doc(productId).update({
+            //   'number': newNumberString,
+            // });
+
+            // Step 6: Delete the order
             await doc.reference.delete();
           });
         });
@@ -59,15 +73,8 @@ class _OrderWidgetState extends State<OrderWidget> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
-          // textColor: Colors.white,
-          // fontSize: 16.0,
         );
-
-        // setState(() {
-        //   //getOrderData();
-        // });
       } catch (error) {
-
         Fluttertoast.showToast(
           msg: 'Xóa sản phẩm không thành công: $error',
           toastLength: Toast.LENGTH_SHORT,
@@ -75,7 +82,6 @@ class _OrderWidgetState extends State<OrderWidget> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          // fontSize: 16.0,
         );
       }
     }

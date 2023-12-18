@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fashion_app/consts/colors.dart';
 import 'package:fashion_app/consts/consts_data.dart';
+import 'package:fashion_app/widgets/back_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ProductsProvider provider = ProductsProvider();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 70,
         backgroundColor: AppColor.primaryColor,
         title: const Text(
@@ -63,14 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              IconButton(
-                icon: Icon(IconlyLight.notification),color: Colors.white,
-                onPressed: () async {
-                  // await Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //   builder: (ctx) => FeedsScreen(),
-                  // ));
-                },
-              ),
+              // IconButton(
+              //   icon: Icon(IconlyLight.notification),color: Colors.white,
+              //   onPressed: () async {
+              //     // await Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //     //   builder: (ctx) => FeedsScreen(),
+              //     // ));
+              //   },
+              // ),
               const SizedBox(
                 width: 10,
               ),
@@ -82,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: AppColor.primaryColor,
         backgroundColor: Colors.white,
         onRefresh: () async {
-          await Future.delayed(Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 1));
           await Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (ctx) => BottomBarScreen(),
           ));
@@ -123,10 +125,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       autoplay: true,
                       itemCount: imageUrls.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Image.network(
+                        return imageUrls[index].isNotEmpty?Image.network(
                           imageUrls[index],
                           fit: BoxFit.cover,
-                        );
+                        ):Image.network('https://scontent.fhan15-2.fna.fbcdn.net/v/t39.30808-6/279371357_112990048065141_1845581227208806699_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeFSrRH1P-X2QkMR7iqAkBBSB6ZsBA9ZOAcHpmwED1k4B2RRjcmMw140_TN-3bdXqOJ72zRDqUSfWQvbO87dETFx&_nc_ohc=hevKyO6z9JgAX_sg2BG&_nc_ht=scontent.fhan15-2.fna&oh=00_AfBy2QlUp-oZayyOI-r6UU9ipx3QTS_aB_3KIKAgVxrnIw&oe=657CEC71');
                       },
                       pagination: const SwiperPagination(
                         margin: EdgeInsets.all(2)
@@ -216,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: size.width / (size.height * 0.70),
+                childAspectRatio: size.width / (size.height * 0.80),
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {

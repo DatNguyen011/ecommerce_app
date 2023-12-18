@@ -145,6 +145,28 @@ class GlobalMethods {
       print('Lỗi khi cập nhật thông tin sản phẩm: $error');
     }
   }
+
+  static Future<void> deleteProductOrder({required String billId,required BuildContext context}) async {
+    try {
+      // Bước 1: Truy vấn đơn đặt hàng với cùng một billId
+      QuerySnapshot ordersQuery = await FirebaseFirestore.instance.collection('orders').where('billId', isEqualTo: billId).get();
+
+      // Bước 2: Xử lý từng đơn đặt hàng và tăng giá trị số lượng tương ứng của sản phẩm
+      for (QueryDocumentSnapshot orderDoc in ordersQuery.docs) {
+        String productId = orderDoc['productId'];
+        int quantity = orderDoc['quantity'];
+        print(quantity);
+        print(productId);
+        // Bước 3: Tăng giá trị numberProduct trong bộ sưu tập products
+        await FirebaseFirestore.instance.collection('products').doc(productId).update({
+          'number': FieldValue.increment(quantity),
+        });
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      print('Lỗi khi cập nhật thông tin sản phẩm: $error');
+    }
+  }
   static Future<void> addToWishlist(
       {required String productId, required BuildContext context}) async {
     final User? user = authInstance.currentUser;

@@ -18,7 +18,7 @@ import '../../services/utils.dart';
 import '../../widgets/empty_screen.dart';
 import '../../widgets/text_widget.dart';
 import 'cart_widget.dart';
-
+import 'package:momo_vn/momo_vn.dart';
 class CartScreen extends StatefulWidget {
 
 
@@ -32,6 +32,11 @@ final TextEditingController _phoneTextController = TextEditingController(text: "
 final TextEditingController _paymentTextController = TextEditingController(text: "Thanh toán khi nhận hàng");
 
 class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).color;
@@ -144,12 +149,13 @@ class _CartScreenState extends State<CartScreen> {
                       context: ctx,
                       builder: (context) {
                         return AlertDialog(
-
                           title: const Text('Thông tin đơn hàng'),
                           content: Container(
                             width: size.width * 0.95,
                             height: size.width * 0.9,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 TextFormField(
                                   initialValue: APIs.me.name,
@@ -178,16 +184,30 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                 ),
                                 SizedBox(height: 20,),
-                                TextFormField(
-                                  initialValue: 'Thanh toán khi nhận hàng',
+                                DropdownButtonFormField<String>(
+                                  value: 'Khi nhận hàng',
                                   decoration: InputDecoration(
-                                      enabled: false,
-                                      prefixIcon:
-                                      const Icon(Icons.payments, color: AppColor.primaryColor),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12)),
-                                      label: const Text('Hình thức thanh toán')
+                                    enabled: false,
+                                    prefixIcon: const Icon(Icons.payments, color: AppColor.primaryColor),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                    labelText: 'Hình thức thanh toán',
                                   ),
+                                  items: [
+                                    'Khi nhận hàng',
+                                    'Thanh toán Momo',
+                                  ].map((String paymentMethod) {
+                                    return DropdownMenuItem<String>(
+                                      value: paymentMethod,
+                                      child: Text(paymentMethod),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
+                                      setState(() {
+                                        _paymentTextController.text = newValue;
+                                      });
+                                    }
+                                  },
                                 ),
                                 SizedBox(height: 20,),
                                 TextFormField(
@@ -240,6 +260,7 @@ class _CartScreenState extends State<CartScreen> {
                                           ? getCurrProduct.salePrice
                                           : getCurrProduct.price) *
                                           value.quantity,
+
                                       'phone': APIs.me.phone,
                                       'totalPrice': total,
                                       'quantity': value.quantity,
@@ -250,6 +271,27 @@ class _CartScreenState extends State<CartScreen> {
                                       'state': 'Chờ xác nhận',
                                       'orderDate': Timestamp.now(),
                                     });
+                                    // await FirebaseFirestore.instance
+                                    //     .collection('products')
+                                    //     .doc(orderId)
+                                    //     .set({
+                                    //   'orderId': orderId,
+                                    //   'userId': user!.uid,
+                                    //   'productId': value.productId,
+                                    //   'price': (getCurrProduct.isOnSale
+                                    //       ? getCurrProduct.salePrice
+                                    //       : getCurrProduct.price) *
+                                    //       value.quantity,
+                                    //   'phone': APIs.me.phone,
+                                    //   'totalPrice': total,
+                                    //   'quantity': value.quantity,
+                                    //   'imageUrl': getCurrProduct.imageUrl,
+                                    //   'userName': user.displayName,
+                                    //   'billId': billID,
+                                    //   'address':APIs.me.address,
+                                    //   'state': 'Chờ xác nhận',
+                                    //   'orderDate': Timestamp.now(),
+                                    // });
                                     await cartProvider.clearOnlineCart();
                                     cartProvider.clearLocalCart();
                                     ordersProvider.fetchOrders();
@@ -287,4 +329,42 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
+  // void processMomoPayment() async {
+  //   try {
+  //
+  //     MomoPaymentInfo options = MomoPaymentInfo(
+  //         merchantName: "Tên đối tác",
+  //         merchantCode: 'Mã đối tác',
+  //         partnerCode: 'Mã đối tác',
+  //         appScheme: "1221212",
+  //         amount: 6000000000,
+  //         orderId: '12321312',
+  //         orderLabel: 'Label để hiển thị Mã giao dịch',
+  //         merchantNameLabel: "Tiêu đề tên cửa hàng",
+  //         fee: 0,
+  //         description: 'Mô tả chi tiết',
+  //         username: 'Định danh user (id/email/...)',
+  //         partner: 'merchant',
+  //         extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
+  //         isTestMode: true
+  //     );
+  //     try {
+  //       _momoPay.open(options);
+  //     } catch (e) {
+  //       debugPrint(e);
+  //     }
+  //     // Xử lý kết quả thanh toán ở đây
+  //     if (response.isSuccess) {
+  //       // Thanh toán thành công
+  //       print('Payment successful');
+  //     } else {
+  //       // Thanh toán thất bại
+  //       print('Payment failed: ${response.message}');
+  //     }
+  //   } catch (e) {
+  //     // Xử lý lỗi nếu có
+  //     print('Error during payment: $e');
+  //   }
+  // }
+
 }

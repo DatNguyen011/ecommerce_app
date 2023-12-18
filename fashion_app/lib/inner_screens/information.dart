@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -18,11 +17,11 @@ import '../consts/colors.dart';
 import '../models/user.dart';
 import '../services/utils.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/ProfileScreen';
   Users user;
-  ProfileScreen({super.key,required this.user});
+
+  ProfileScreen({super.key, required this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -31,7 +30,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _image;
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +44,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           builder: (_) {
             return ListView(
               shrinkWrap: true,
-              padding:
-              EdgeInsets.only(top: mq.height * .03, bottom: mq.height * .05),
+              padding: EdgeInsets.only(
+                  top: mq.height * .03, bottom: mq.height * .05),
               children: [
                 //pick profile picture label
                 const Text('Chọn ảnh hồ sơ',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
 
                 //for adding some space
                 SizedBox(height: mq.height * .02),
@@ -79,12 +78,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
 
                             APIs.updateProfilePicture(File(_image!));
-                            // for hiding bottom sheet
+
                             Navigator.pop(context);
                           }
                         },
-                        child: Image.network('https://cdn-icons-png.flaticon.com/512/883/883746.png')),
-
+                        child: Image.network(
+                            'https://play-lh.googleusercontent.com/rPJjfIPXYy_XrZfTuofKfCJH54SRtjzU-eOYAXv-geSm-0hv1csnpBeEtztSHycYFlU')),
                     //take picture from camera button
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -98,7 +97,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           final XFile? image = await picker.pickImage(
                               source: ImageSource.camera, imageQuality: 80);
                           if (image != null) {
-
                             setState(() {
                               _image = image.path;
                             });
@@ -108,22 +106,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.pop(context);
                           }
                         },
-                        child: Image.network('https://play-lh.googleusercontent.com/rPJjfIPXYy_XrZfTuofKfCJH54SRtjzU-eOYAXv-geSm-0hv1csnpBeEtztSHycYFlU')),
+                        child: Image.network(
+                            'https://cdn-icons-png.flaticon.com/512/883/883746.png')),
                   ],
                 )
               ],
             );
           });
     }
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-            title: const Text('Thông tin người dùng',style: TextStyle(color: Colors.white),),
+          appBar: AppBar(
+            title: const Text(
+              'Thông tin người dùng',
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: AppColor.primaryColor,
             leading: const BackWidget(),
-        ),
-        //body
+          ),
+          //body
           body: Form(
             key: _formKey,
             child: Padding(
@@ -141,30 +144,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _image != null
                             ?
 
-                        //local image
-                        ClipRRect(
-                            borderRadius:
-                            BorderRadius.circular(mq.height * .1),
-                            child: Image.file(File(_image!),
-                                width: mq.height * .2,
-                                height: mq.height * .2,
-                                fit: BoxFit.cover))
+                            //local image
+                            ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .1),
+                                child: Image.file(File(_image!),
+                                    width: mq.height * .2,
+                                    height: mq.height * .2,
+                                    fit: BoxFit.cover))
                             :
 
-                        //image from server
-                        ClipRRect(
-                          borderRadius:
-                          BorderRadius.circular(mq.height * .1),
-                          child: CachedNetworkImage(
-                            width: mq.height * .2,
-                            height: mq.height * .2,
-                            fit: BoxFit.cover,
-                            imageUrl: widget.user.image,
-                            errorWidget: (context, url, error) =>
-                            const CircleAvatar(
-                                child: Icon(CupertinoIcons.person)),
-                          ),
-                        ),
+                            //image from server
+                            ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .1),
+                                child: CachedNetworkImage(
+                                  width: mq.height * .2,
+                                  height: mq.height * .2,
+                                  fit: BoxFit.cover,
+                                  imageUrl: widget.user.image,
+                                  errorWidget: (context, url, error) =>
+                                      const CircleAvatar(
+                                          child: Icon(CupertinoIcons.person)),
+                                ),
+                              ),
 
                         //edit image button
                         Positioned(
@@ -177,7 +180,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             shape: const CircleBorder(),
                             color: Colors.white,
-                            child: const Icon(Icons.edit, color: AppColor.primaryColor),
+                            child: const Icon(Icons.edit,
+                                color: AppColor.primaryColor),
                           ),
                         )
                       ],
@@ -202,8 +206,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ? null
                           : 'Vui lòng nhập đủ',
                       decoration: InputDecoration(
-                          prefixIcon:
-                          const Icon(Icons.person, color: AppColor.primaryColor),
+                          prefixIcon: const Icon(Icons.person,
+                              color: AppColor.primaryColor),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           hintText: 'vd. Nguyễn Văn A',
@@ -219,13 +223,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ? null
                           : 'Vui lòng nhập đủ',
                       decoration: InputDecoration(
-                          prefixIcon:
-                          const Icon(Icons.phone, color: AppColor.primaryColor),
+                          prefixIcon: const Icon(Icons.phone,
+                              color: AppColor.primaryColor),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           hintText: 'vd. 0123456789',
-                          label: const Text('Sđt')
-                      ),
+                          label: const Text('Sđt')),
                     ),
                     SizedBox(height: mq.height * .02),
                     TextFormField(
@@ -239,7 +242,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: AppColor.primaryColor),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
-                          hintText: 'vd. Phố Triều Khúc, Triều Khúc, Thanh Xuân Nam, Thanh Xuân, Hà Nội',
+                          hintText:
+                              'vd. Phố Triều Khúc, Triều Khúc, Thanh Xuân Nam, Thanh Xuân, Hà Nội',
                           label: const Text('Địa chỉ')),
                     ),
 
@@ -266,7 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       icon: const Icon(Icons.edit, size: 28),
                       label:
-                      const Text('UPDATE', style: TextStyle(fontSize: 16)),
+                          const Text('UPDATE', style: TextStyle(fontSize: 16)),
                     ),
                     SizedBox(height: mq.height * .05),
                   ],
@@ -274,11 +278,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           )),
-
     );
   }
 
-  // bottom sheet for picking a profile picture for user
-
-
+// bottom sheet for picking a profile picture for user
 }

@@ -13,7 +13,7 @@ import '../widgets/text_widget.dart';
 
 
 class CategoryScreen extends StatefulWidget {
-  static const routeName = "/CategoryScreenState";
+  static const routeName = "/CategoryScreen";
   const CategoryScreen({Key? key}) : super(key: key);
 
   @override
@@ -40,6 +40,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     List<ProductModel> productByCat = productsProvider.findByCategory(catName);
     return Scaffold(
       appBar: AppBar(
+        //automaticallyImplyLeading: false,
         leading: const BackWidget(),
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -109,7 +110,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             crossAxisCount: 2,
             padding: EdgeInsets.zero,
             // crossAxisSpacing: 10,
-            childAspectRatio: size.width / (size.height * 0.70),
+            childAspectRatio: size.width / (size.height * 0.80),
             children: List.generate(
                 _searchTextController!.text.isNotEmpty
                     ? listProdcutSearch.length

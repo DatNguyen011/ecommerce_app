@@ -98,6 +98,7 @@ class _UserScreenState extends State<UserScreen> {
     final Color subTitleColor = themeState.getDarkTheme ? Colors.white : AppColor.subTextColor;
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 70,
           backgroundColor: AppColor.primaryColor,
           title: const Text(
@@ -189,6 +190,12 @@ class _UserScreenState extends State<UserScreen> {
                       // subtitle: address,
                       icon: IconlyLight.profile,
                       onPressed: () async {
+                        if (user == null) {
+                          GlobalMethods.errorDialog(
+                              subtitle: 'Vui lòng đăng nhập trước',
+                              context: context);
+                          return;
+                        }
                         GlobalMethods.navigateTo(
                             ctx: context, routeName: ProfileScreen.routeName);
                       },
